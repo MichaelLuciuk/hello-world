@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<title>Final (Program B)</title>
+	<!-- Program asks a user for a word of any length, then randomly generates a new word of the same length using only the letters of the first word.  
+	Uses each letter exactly once and capitalizes only the first letter of the new word. -->
+</head>
+
+<body style="width:90%; margin-left:auto; margin-right:auto; padding:15px; background-color: beige; font-size: 25px; text-align:center;">
+
+<script type="text/javascript">
+
+function _start(form) { //Runs when user clicks the start button.
+
+	var userInput = form.txtBefore.value;  //Sets userInput equal to what the user entered.
+	var InputLength = userInput.length;  //Sets InputLength equal to the length of the word the user entered.
+	
+	if (InputLength > 2) {  //If the input is greater than 2 characters, it runs the code.
+	
+		var i = 1;
+		var c = 1; 
+		var character = new Array();
+		var newWord = "";  //Declares i, c, character, and newWord. 
+		var previousWord = form.txtAfter.value; //Sets previousWord equal to the last random word generated.
+		
+		function genRandomInt(character, length){  //Function generates and returns a random number
+			do {
+				var rn = Math.round((Math.random() * (InputLength - 1))) + 1;
+			} while (character[rn] == "used");  //Loops while the corresponding character has not been flagged.
+			return rn;
+		}	
+		
+		do {
+			newWord = "";
+			i = 1;
+			c = 1; //Resets newWord, i, and c.
+			
+			do {
+				character[i] = userInput.substring(i-1,i).toLowerCase(); //Slices the word into an array of lowercase letters.
+				i++; //Increments i.
+			} while (i <= InputLength); //Loops as many times as needed so you get the full length of the word.
+			
+			do {
+				i = genRandomInt(character, InputLength); //Calls the function to generate a random munber.
+				newWord += character[i]; //Puts the new word together.
+				
+				if (c == 1) {
+					newWord = newWord.toUpperCase();  //Captitalizes only the first letter in the new word.
+				}
+				
+				character[i] = "used"; //Flags the letter so it won't be used again.
+				c++; //Increments c.
+			} while (c <= InputLength); //Loops as many times as needed so you get the full length of the word.
+		} while ((newWord.toLowerCase() == userInput.toLowerCase()) || (newWord == previousWord)); //Loops until 
+					//the new word is not the same as the entered word nor the last randomly generated word.
+		
+		form.txtAfter.value = newWord; //Sets the after textbox equal to the new word.
+		
+	} else {  //If the input is less than 2, it shows an alert asking the user to fix it.
+		alert("Please enter a word at least three letters long into the 'Before' textbox.");
+	}
+}
+
+function _clear(form) { //Runs when user clicks the clear button, clears out both the before and after textboxes.
+	form.txtAfter.value = "";
+	form.txtBefore.value = "";
+}
+</script>
+
+<form name="form1">
+	<p>Use this program to reorganize the letters in any word to make a new word.  Each letter will be used exactly once in the new word.</p>
+	<p>Please enter a word into the 'Before' textbox and click start until you see a new word you like in the 'After' textbox.</p><br /><br />
+	Before: &nbsp; <input type="text" name="txtBefore" value=""> <br />
+	&nbsp;&nbsp;After: &nbsp; <input type="text" name="txtAfter" value=""> <br /><br />
+	<input type="button" name="btnStart" style="font-size:20px; margin:8px" onClick="_start(this.form)" value="Start" /><!--Start button, runs start function on click.-->
+	<input type="button" name="btnClear" style="font-size:20px; margin:8px" onClick="_clear(this.form)" value="Clear" /><!--Clear button, runs clear function on click.-->
+</form>
+	
+</body>
+</html>
